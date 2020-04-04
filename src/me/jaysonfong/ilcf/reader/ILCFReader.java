@@ -36,9 +36,7 @@ import me.jaysonfong.ilcf.exception.IndentationException;
 public class ILCFReader {    
     private final File file;
     private final ILCFProcessor processor = new ILCFProcessor();
-    
-    private HashMap<String, Object> variables;        
-    
+        
     /**
      * Uses an existing File object.
      * @param file An Object of type File
@@ -65,8 +63,11 @@ public class ILCFReader {
         try (Scanner fileInput = new Scanner(file)) {
             while (fileInput.hasNextLine())
                 processor.processLine(fileInput.nextLine());
-            variables = processor.getVariables();
         }
+    }
+    
+    public ILCFProcessor getProcessor() {
+        return processor;
     }
     
     /**
@@ -74,7 +75,7 @@ public class ILCFReader {
      * @return A HashMap containing the variables parsed.
      */
     public HashMap<String, Object> getVariables() {
-        return variables;
+        return processor.getVariables();
     }
     
     /**
@@ -83,7 +84,7 @@ public class ILCFReader {
      * @return The value retrieved using the given identifier.
      */
     public Object get(String indentifier) {
-        return variables.get(indentifier);
+        return processor.getVariables().get(indentifier);
     }
     
     /**
@@ -92,7 +93,7 @@ public class ILCFReader {
      * @return The value retrieved converted to a String from given identifier.
      */
     public String getString(String identifier) {
-        return variables.get(identifier).toString();
+        return get(identifier).toString();
     }
     
     /**
