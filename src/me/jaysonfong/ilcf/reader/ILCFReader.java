@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 import me.jaysonfong.ilcf.exception.IndentationException;
+import me.jaysonfong.ilcf.exception.KeyNotFoundException;
 
 /**
  * Indented Line Configuration Format Reader
@@ -83,7 +84,10 @@ public class ILCFReader {
      * @param indentifier A reference to the data.
      * @return The value retrieved using the given identifier.
      */
-    public Object get(String indentifier) {
+    public Object get(String indentifier) throws KeyNotFoundException {
+        HashMap<String, Object> variables = processor.getVariables();
+        if (!variables.containsKey(indentifier))
+            throw new KeyNotFoundException("Could Not Find Key %s", indentifier);
         return processor.getVariables().get(indentifier);
     }
     
@@ -92,7 +96,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a String from given identifier.
      */
-    public String getString(String identifier) {
+    public String getString(String identifier) throws KeyNotFoundException {
         return get(identifier).toString();
     }
     
@@ -101,7 +105,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Integer from given identifier.
      */
-    public Integer getInteger(String identifier) {
+    public Integer getInteger(String identifier) throws KeyNotFoundException {
         return Integer.valueOf(getString(identifier));
     }
     
@@ -110,7 +114,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Double from given identifier.
      */
-    public Double getDouble(String identifier) {
+    public Double getDouble(String identifier) throws KeyNotFoundException {
         return Double.valueOf(getString(identifier));
     }
     
@@ -119,7 +123,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Long from given identifier.
      */
-    public Long getLong(String identifier) {
+    public Long getLong(String identifier) throws KeyNotFoundException {
         return Long.valueOf(getString(identifier));
     }
     
@@ -128,7 +132,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Float from given identifier.
      */
-    public Float getFloat(String identifier) {
+    public Float getFloat(String identifier) throws KeyNotFoundException {
         return Float.valueOf(getString(identifier));
     }
     
@@ -137,7 +141,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Boolean from given identifier.
      */
-    public Boolean getBoolean(String identifier) {
+    public Boolean getBoolean(String identifier) throws KeyNotFoundException {
         return Boolean.valueOf(getString(identifier));
     }
     
@@ -146,7 +150,7 @@ public class ILCFReader {
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Character from given identifier.
      */
-    public Character getCharacter(String identifier) {
+    public Character getCharacter(String identifier) throws KeyNotFoundException {
         return getString(identifier).charAt(0);
     }
 }
