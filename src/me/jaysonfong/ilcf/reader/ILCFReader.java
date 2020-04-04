@@ -25,7 +25,6 @@ package me.jaysonfong.ilcf.reader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import me.jaysonfong.ilcf.exception.IndentationException;
@@ -34,19 +33,11 @@ import me.jaysonfong.ilcf.exception.IndentationException;
  * Indented Line Configuration Format Reader
  * @author Jayson Fong <fong.jayson@gmail.com>
  */
-public class ILCFReader {
-    private final char ASSIGN_DELIM = '=';
-    private final char COMMENT_DELIM = '#';
-    private final String PREFIX_DELIM = "_";
-    private final char ARRLIST_CHAR = '-';
-    private final char HASHMAP_CHAR = '*';
-    
+public class ILCFReader {    
     private final File file;
-    private final HashMap<String, Object> variables = new HashMap();
-    private final ArrayList<String> prefixes = new ArrayList();
-            
-    private boolean inArrayList = false;
-    private boolean inHashMap = false;
+    private final ILCFProcessor processor = new ILCFProcessor();
+    
+    private HashMap<String, Object> variables;        
     
     /**
      * Uses an existing File object.
@@ -68,11 +59,13 @@ public class ILCFReader {
      * Reads the file for parsing.
      * @throws FileNotFoundException
      * @throws IndentationException
+     * @see ILCFProcessor
      */
     public void read() throws FileNotFoundException, IndentationException {
         try (Scanner fileInput = new Scanner(file)) {
             while (fileInput.hasNextLine())
-                processLine(fileInput.nextLine());
+                processor.processLine(fileInput.nextLine());
+            variables = processor.getVariables();
         }
     }
     
@@ -155,93 +148,4 @@ public class ILCFReader {
     public Character getCharacter(String identifier) {
         return getString(identifier).charAt(0);
     }
-    
-    private void processLine(String line) throws IndentationException {
-        line = trim(line);
-        int assignDelimIndex = line.indexOf(ASSIGN_DELIM);
-        if (assignDelimIndex == - 0x1) assignDelimIndex = line.length();
-        boolean empty = assignDelimIndex >= line.length() - 0x1;
-        String name = getName(trim(line.substring(0, assignDelimIndex)));
-        if (name.length() != 0x0 && !empty) variables.put(
-            name, getValue(trim(line.substring(assignDelimIndex + 0x1)))
-        );
-    }
-   
-    private String trim(String line) {
-        return line.replaceAll(" ++$", "");
-    }
-    
-    private String getName(String line) throws IndentationException {
-        int tabs = getTabCount(line);
-        checkIndentations(tabs);
-        reducePrefixes(tabs);
-        String name = line.trim();
-        if (checkForList(line)) return "";
-        String prefix = getPrefix();
-        prefixes.add(name);
-        return prefix + name;
-    }
-    
-    private boolean inList() {
-        return inHashMap || inArrayList;
-    }
-    
-    private boolean checkForList(String line) {
-        char firstChar = line.charAt(0);
-        if (firstChar == HASHMAP_CHAR) inHashMap = true;
-        else if (firstChar == ARRLIST_CHAR) inArrayList = true;
-        else {
-            inArrayList = inHashMap = false;
-            return false;
-        }
-        return true;
-    }
-    
-    private void checkIndentations(int tabs) throws IndentationException {
-        int listedPrefixSize = prefixes.size();
-        if (tabs > listedPrefixSize)
-            throw new IndentationException("Too Many Indentations");
-    }
-        
-    private void reducePrefixes(int tabs) {
-        while (tabs != prefixes.size()) {
-            prefixes.remove(prefixes.size() - 0x1);
-        }
-    }
-    
-    private int getTabCount(String line) {
-        if (line.length() < 1) return 0;
-        if (line.substring(0x0, 0x1).equals("\t"))
-            return 1 + getTabCount(line.substring(0x1));
-        return 0;
-    }
-    
-    private String[] getPrefixes() {
-        String[] prefixArray = new String[this.prefixes.size()];
-        for (int i = 0; i < this.prefixes.size(); i++)
-            prefixArray[i] = this.prefixes.get(i);
-        return prefixArray;
-    }
-    
-    private String getPrefix() {
-        String prefix = String.join(PREFIX_DELIM, getPrefixes());
-        if (prefix.length() != 0x0) prefix += PREFIX_DELIM;
-        return prefix;
-    }
-    
-    private String getValue(String line) {
-        int commentDelimIndex = getCommentDelimLocation(line);
-        if (commentDelimIndex == 0x0) return "";
-        if (commentDelimIndex == - 0x1) commentDelimIndex = line.length();
-        return line.substring(0x0, commentDelimIndex).trim();
-    }
-    
-    private int getCommentDelimLocation(String line) {
-        int commentDelimIndex = line.lastIndexOf(COMMENT_DELIM);
-        if (commentDelimIndex < 0x1) return commentDelimIndex;
-        if (line.charAt(commentDelimIndex - 0x1) == '\\') return - 0x1;
-        return commentDelimIndex;
-            
-    }
-    
 }
