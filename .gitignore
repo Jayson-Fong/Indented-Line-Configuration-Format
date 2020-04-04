@@ -1,0 +1,6 @@
+
+*.properties
+nbproject/*
+dist/*
+build/*
+build.xml
