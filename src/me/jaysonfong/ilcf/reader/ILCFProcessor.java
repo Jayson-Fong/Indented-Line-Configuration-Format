@@ -36,7 +36,7 @@ public class ILCFProcessor {
     private final char COMMENT_DELIM = '#';
     private final char ARRLIST_CHAR = '-';
     private final char HASHMAP_CHAR = '*';
-    private final String PREFIX_DELIM = "_";
+    private final String PREFIX_DELIM = "\u002e";
     
     private final int PARTIAL_TRIM = 0x0;
     private final int FULL_TRIM = 0x1;
@@ -87,7 +87,7 @@ public class ILCFProcessor {
                 : getName(lines[FULL_TRIM], assignDelimIndex);
         String prefix = getPrefix(lines[PARTIAL_TRIM], name);
         if (!isLabel) {
-            String value = getValue(lines[FULL_TRIM], assignDelimIndex);
+            String value = descape(getValue(lines[FULL_TRIM], assignDelimIndex));
             variables.put(prefix + name, value);
         }
     }
@@ -97,6 +97,15 @@ public class ILCFProcessor {
         if (commentIndex < 0x0) return fullTrimLine
                 .substring(assignDelimIndex + 0x1).trim();
         return fullTrimLine.substring(assignDelimIndex + 0x1, commentIndex).trim();
+    }
+    
+    private String descape(String value) {
+        return value
+                .replace("\\#", "#")
+                .replace("\\n", "\n")
+                .replace("\\t", "\t")
+                .replace("\\rb", "\\")
+                .replace("\\r", "\r");
     }
 
     private String getPrefix(String partialTrimLine, String name)
