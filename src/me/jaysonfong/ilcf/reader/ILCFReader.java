@@ -95,6 +95,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a string.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a String from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public String getString(String identifier) throws KeyNotFoundException {
         return get(identifier).toString();
@@ -104,6 +105,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to an integer.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Integer from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Integer getInteger(String identifier) throws KeyNotFoundException {
         return Integer.valueOf(getString(identifier));
@@ -113,6 +115,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a Double.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Double from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Double getDouble(String identifier) throws KeyNotFoundException {
         return Double.valueOf(getString(identifier));
@@ -122,6 +125,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a Long.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Long from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Long getLong(String identifier) throws KeyNotFoundException {
         return Long.valueOf(getString(identifier));
@@ -131,6 +135,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a Float.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Float from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Float getFloat(String identifier) throws KeyNotFoundException {
         return Float.valueOf(getString(identifier));
@@ -140,6 +145,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a Boolean.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Boolean from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Boolean getBoolean(String identifier) throws KeyNotFoundException {
         return Boolean.valueOf(getString(identifier));
@@ -149,6 +155,7 @@ public class ILCFReader {
      * Returns the value at the given identifier after conversion to a Character.
      * @param identifier A reference to the data.
      * @return The value retrieved converted to a Character from given identifier.
+     * @throws me.jaysonfong.ilcf.exception.KeyNotFoundException
      */
     public Character getCharacter(String identifier) throws KeyNotFoundException {
         return getString(identifier).charAt(0);

@@ -28,6 +28,12 @@ package me.jaysonfong.ilcf.exception;
  * @author Jayson Fong <fong.jayson@gmail.com>
  */
 public class IndentationException extends Exception {
+
+    /**
+     * Indentation Exception
+     * Thrown when there are too many indents on a line.
+     * @param message
+     */
     public IndentationException(String message) {
         super(message);
     }

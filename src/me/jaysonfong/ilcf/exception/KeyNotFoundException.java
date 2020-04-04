@@ -28,10 +28,23 @@ package me.jaysonfong.ilcf.exception;
  * @author Jayson Fong <fong.jayson@gmail.com>
  */
 public class KeyNotFoundException extends Exception {
+
+    /**
+     * Key Not Found Exception
+     * Thrown when a requested key is not found.
+     * @param message The error message.
+     */
     public KeyNotFoundException(String message) {
         super(message);
     }
-    public KeyNotFoundException(String message, String... params) {
+
+    /**
+     * Key Not Found Exception
+     * Thrown when a requested key is not found and formats with variables.
+     * @param message The error message.
+     * @param params Parameters of the error message.
+     */
+    public KeyNotFoundException(String message, Object... params) {
         super(String.format(message, params));
     }
 }
